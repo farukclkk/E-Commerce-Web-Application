@@ -1,6 +1,29 @@
-import mongoose from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 
-const itemSchema = new mongoose.Schema({
+interface IItem extends Document {
+  name: string;
+  description: string;
+  price: number;
+  category: 'Vinyls' | 'Antique Furniture' | 'GPS Sport Watches' | 'Running Shoes';
+  seller: string;
+  image: string;
+  batteryLife?: number;
+  age?: number;
+  size?: string;
+  material?: string;
+  ratings: Array<{
+    userId: mongoose.Types.ObjectId;
+    rating: number;
+  }>;
+  reviews: Array<{
+    userId: mongoose.Types.ObjectId;
+    text: string;
+    createdAt: Date;
+  }>;
+  averageRating: number;
+}
+
+const itemSchema = new mongoose.Schema<IItem>({
   name: {
     type: String,
     required: true,
@@ -29,25 +52,25 @@ const itemSchema = new mongoose.Schema({
   // Optional fields based on category
   batteryLife: {
     type: Number,
-    required: function() {
+    required: function(this: IItem) {
       return this.category === 'GPS Sport Watches';
     },
   },
   age: {
     type: Number,
-    required: function() {
+    required: function(this: IItem) {
       return this.category === 'Antique Furniture' || this.category === 'Vinyls';
     },
   },
   size: {
     type: String,
-    required: function() {
+    required: function(this: IItem) {
       return this.category === 'Running Shoes';
     },
   },
   material: {
     type: String,
-    required: function() {
+    required: function(this: IItem) {
       return this.category === 'Antique Furniture' || this.category === 'Running Shoes';
     },
   },
@@ -86,4 +109,4 @@ const itemSchema = new mongoose.Schema({
   timestamps: true,
 });
 
-export default mongoose.models.Item || mongoose.model('Item', itemSchema); 
+export default mongoose.models.Item || mongoose.model<IItem>('Item', itemSchema); 
