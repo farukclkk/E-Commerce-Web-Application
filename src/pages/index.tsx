@@ -11,6 +11,7 @@ interface Item {
   category: string;
   seller: string;
   image: string;
+  imageUrl: string;
   averageRating: number;
   batteryLife?: number;
   age?: number;
@@ -123,7 +124,7 @@ export default function Home() {
             >
               <div className="relative h-48 overflow-hidden">
                 <Image
-                  src={`https://picsum.photos/seed/${item._id}/400/300`}
+                  src={item.imageUrl}
                   alt={item.name}
                   width={400}
                   height={300}
@@ -186,4 +187,4 @@ export default function Home() {
       </div>
     </div>
   );
-} 
+}

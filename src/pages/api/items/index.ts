@@ -31,7 +31,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const { db } = await connectToDatabase();
       const item = {
         ...req.body,
-        seller: session.user.username,
         createdAt: new Date(),
         updatedAt: new Date(),
         ratings: [],
@@ -48,4 +47,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     console.error('API Error:', error);
     return res.status(500).json({ message: 'Internal server error' });
   }
-} 
+}

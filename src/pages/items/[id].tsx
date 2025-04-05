@@ -12,6 +12,7 @@ interface Item {
   category: string;
   seller: string;
   image: string;
+  imageUrl: string;
   averageRating: number;
   ratings: Array<{
     userId: string;
@@ -153,7 +154,7 @@ export default function ItemPage() {
             <div className="md:flex-shrink-0">
               <div className="relative h-64 w-full md:h-full md:w-96">
                 <Image
-                  src={`https://picsum.photos/seed/${item._id}/400/400`}
+                  src={item.imageUrl}
                   alt={item.name}
                   fill
                   className="object-cover"
@@ -186,7 +187,7 @@ export default function ItemPage() {
                 {item.material && <p>Material: {item.material}</p>}
               </div>
 
-              {session && (
+              {session ? (
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
                     <label
@@ -234,6 +235,12 @@ export default function ItemPage() {
                     {submitting ? 'Submitting...' : 'Submit Rating'}
                   </button>
                 </form>
+              ) : (
+                <div className="mt-4 p-4 bg-gray-50 border border-gray-200 rounded-md">
+                  <p className="text-gray-700 text-sm">
+                    Please <Link href="/auth/signin" className="text-blue-600 hover:text-blue-800 font-medium">sign in</Link> to rate and review this item.
+                  </p>
+                </div>
               )}
             </div>
           </div>
@@ -299,4 +306,4 @@ export default function ItemPage() {
       </div>
     </div>
   );
-} 
+}

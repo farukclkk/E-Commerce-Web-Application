@@ -20,6 +20,8 @@ export default function NewItem() {
     age: '',
     size: '',
     material: '',
+    imageUrl: '',
+    seller: '',
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -58,8 +60,6 @@ export default function NewItem() {
           price: Number(formData.price),
           batteryLife: formData.batteryLife ? Number(formData.batteryLife) : undefined,
           age: formData.age ? Number(formData.age) : undefined,
-          seller: session.user.username,
-          image: `https://picsum.photos/seed/${Date.now()}/400/400`,
         }),
       });
 
@@ -122,6 +122,31 @@ export default function NewItem() {
         </div>
 
         <div>
+          <label className="block text-sm font-medium text-gray-700">Seller</label>
+          <input
+            type="text"
+            name="seller"
+            value={formData.seller}
+            onChange={handleChange}
+            required
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+          />
+        </div>
+        
+        <div>
+          <label className="block text-sm font-medium text-gray-700">Image URL</label>
+          <input
+            type="url"
+            name="imageUrl"
+            value={formData.imageUrl}
+            onChange={handleChange}
+            required
+            placeholder="https://example.com/image.jpg"
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+          />
+        </div>
+
+        <div>
           <label className="block text-sm font-medium text-gray-700">Price</label>
           <input
             type="number"
@@ -169,7 +194,7 @@ export default function NewItem() {
 
         {(formData.category === 'Antique Furniture' || formData.category === 'Vinyls') && (
           <div>
-            <label className="block text-sm font-medium text-gray-700">Age (months)</label>
+            <label className="block text-sm font-medium text-gray-700">Age (years)</label>
             <input
               type="number"
               name="age"

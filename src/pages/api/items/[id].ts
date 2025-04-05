@@ -8,12 +8,6 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const session = await getServerSession(req, res, authOptions);
-
-  if (!session) {
-    return res.status(401).json({ message: 'Unauthorized' });
-  }
-
   const { db } = await connectToDatabase();
   const { id } = req.query;
 
@@ -59,6 +53,12 @@ export default async function handler(
         });
 
       case 'POST':
+        // Authentication check for POST operations
+        const session = await getServerSession(req, res, authOptions);
+        if (!session) {
+          return res.status(401).json({ message: 'Unauthorized' });
+        }
+
         const { rating, review } = req.body;
 
         if (!rating || rating < 1 || rating > 10) {
@@ -175,7 +175,9 @@ export default async function handler(
         return res.status(200).json({ message: 'Rating added successfully' });
 
       case 'DELETE':
-        if (!session.user.isAdmin) {
+        // Authentication check for DELETE operations
+        const deleteSession = await getServerSession(req, res, authOptions);
+        if (!deleteSession?.user.isAdmin) {
           return res.status(403).json({ message: 'Forbidden' });
         }
 
@@ -195,4 +197,4 @@ export default async function handler(
     console.error('Error handling item:', error);
     return res.status(500).json({ message: 'Internal server error' });
   }
-} 
+}
